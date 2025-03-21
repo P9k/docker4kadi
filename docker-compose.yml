@@ -23,7 +23,7 @@ services:
     networks:
       - kadi_network
     entrypoint: /app/entrypoint.sh
-#    command: ["uwsgi", "--ini", "/app/kadi-uwsgi.ini"]
+    command: ["uwsgi", "--ini", "/app/kadi-uwsgi.ini"]
 
 
   postgres:
