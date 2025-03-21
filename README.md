@@ -2,7 +2,7 @@
 Docker installation for the Kadi4Mat software -> **WORK IN PROGRESS**
 
 ## Goal
-Generate an out-of-the-box solution to install the generic and open source virtual research environment [Kadi4Mat](https://kadi.iam.kit.edu/) containerized using [Docker Compose](https://docs.docker.com/compose/)
+Generate an out-of-the-box solution to install the generic and open source virtual research environment [Kadi4Mat](https://kadi.iam.kit.edu/) containerized using [Docker Compose](https://docs.docker.com/compose/).
 
 ## Note
 The configuration is not yet functional, but a work in progress. 
