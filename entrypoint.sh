@@ -19,9 +19,8 @@ echo "Datenbank initialisiert!"
 #kadi search init
 #echo "Suchindex initialisiert!"
 
-kadi utils uwsgi --default --out kadi-uwsgi.ini
+#kadi utils uwsgi --default --out kadi-uwsgi.ini
 
 # uWSGI starten
 echo "Starte uWSGI..."
-uwsgi --socket 0.0.0.0:8000 --wsgi main:application
-#uwsgi --ini /app/kadi-uwsgi.ini
+exec uwsgi --ini /app/kadi-uwsgi.ini
