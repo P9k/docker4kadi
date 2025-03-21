@@ -13,7 +13,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-COPY kadi.py /app/config/kadi.py
-
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
