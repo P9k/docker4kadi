@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  kadi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - KADI_CONFIG_FILE=/app/config/kadi.py
+    volumes:
+      - ./config:/app/config
+      - ./storage:/opt/kadi/storage
+      - ./uploads:/opt/kadi/uploads
+    networks:
+      - kadi_network
+    entrypoint: /app/entrypoint.sh
+#    command: ["uwsgi", "--ini", "/app/kadi-uwsgi.ini"]
+
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: kadi
+      POSTGRES_USER: kadi
+      POSTGRES_PASSWORD: your_secret_key_here
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - kadi_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kadi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - kadi_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - kadi_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  kadi_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  elasticsearch_data:
